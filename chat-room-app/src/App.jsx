@@ -10,8 +10,13 @@ const App = () => {
 
   const [message, setMessage] = useState("");
   const [room, setRoom] = useState("");
+  const [chat, setChat] = useState([]);
 
   useEffect(() => {
+    socket.on("connect", () => {
+      console.log("id", socket.id);
+    });
+
     socket.on("welcome", (data) => {
       console.log(data);
     });
@@ -20,19 +25,20 @@ const App = () => {
       console.log(data);
     });
 
-    socket.on('msg-show', (data) => {
-      console.log(data)
-    })
+    socket.on("msg-show", (data) => {
+      // console.log(data);
+      setChat([...chat, data]);
+    });
 
     // return () => {
     //   socket.disconnect()
     // }
-  }, []);
+  }, [chat]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    socket.emit("message", {message, room});
-    setMessage('');
+    socket.emit("message", { message, room });
+    setMessage("");
   };
 
   return (
@@ -61,6 +67,12 @@ const App = () => {
           </button>
         </div>
       </form>
+
+      <div>
+        {chat.map((msg, index) => (
+          <div key={index}>{msg.message}</div>
+        ))}
+      </div>
     </div>
   );
 };

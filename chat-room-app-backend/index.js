@@ -48,7 +48,10 @@ io.on('connection', (socket) => {
 
         io.to(data.room).emit('msg-show', data)
 
-    })
+    });
+
+
+    
 
     socket.on('disconnect', () => {
         console.log('user disconnected!', socket.id)
