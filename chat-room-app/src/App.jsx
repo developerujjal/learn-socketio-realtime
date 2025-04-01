@@ -9,6 +9,7 @@ const App = () => {
   // }, []);
 
   const [message, setMessage] = useState("");
+  const [room, setRoom] = useState("");
 
   useEffect(() => {
     socket.on("welcome", (data) => {
@@ -19,6 +20,10 @@ const App = () => {
       console.log(data);
     });
 
+    socket.on('msg-show', (data) => {
+      console.log(data)
+    })
+
     // return () => {
     //   socket.disconnect()
     // }
@@ -26,7 +31,7 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    socket.emit("message", message);
+    socket.emit("message", {message, room});
     setMessage('');
   };
 
@@ -38,6 +43,13 @@ const App = () => {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type a message..."
+            className="flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <input
+            type="text"
+            value={room}
+            onChange={(e) => setRoom(e.target.value)}
             placeholder="Type a message..."
             className="flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />

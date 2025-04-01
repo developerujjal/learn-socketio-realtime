@@ -36,10 +36,18 @@ io.on('connection', (socket) => {
     console.log('new user connected:', socket.id );
     socket.emit('welcome', 'Welcome to everyone!')
 
-    io.emit('hello', `New Guest Join ${socket.id}`);
+    // io.emit('hello', `New Guest Join ${socket.id}`);
 
     socket.on('message', (data) => {
         console.log(data)
+        // io.emit('msg-show', data);
+
+        // socket.broadcast.emit('msg-show', data);
+
+        //for specific person send io/socket does not matter, but we will used io 
+
+        io.to(data.room).emit('msg-show', data)
+
     })
 
     socket.on('disconnect', () => {
